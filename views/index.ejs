@@ -11,9 +11,79 @@
 </head>
 
 <body>
-  <h1>
-    <%= title %>
-  </h1>
+  
+    <form>
+      <fieldset class="ts-fieldset">
+        <legend>額外附註</legend>
+        <div class="ts-list is-unordered">
+          <div class="item">這個世界只是一個假象，所有肉眼可見的東西都不是真的。</div>
+          <div class="item">在時間的盡頭那端，有道不可逆的防火牆。</div>
+          <div class="item">你從來沒有到過這個地方。如果你覺得這一切都很眼熟，請務必聯繫離你最近的服務人員。</div>
+        </div>
+      </fieldset>
+      <div class="ts-space"></div>
+      <div class="ts-space"></div>
+      <div class="ts-grid is-2-columns">
+        <div class="column">
+          <div class="ts-text is-label">商店代號</div>
+          <div class="ts-space is-small"></div>
+          <div class="ts-input is-fluid">
+            <input type="text" value="MS148693379">
+          </div>
+        </div>
+        <div class="column">
+          <div class="ts-text is-label">訂單編號</div>
+          <div class="ts-space is-small"></div>
+          <div class="ts-input is-fluid">
+            <input type="text">
+          </div>
+        </div>
+      </div>
+      <div class="ts-space"></div>
+      <fieldset class="ts-fieldset">
+        <legend>訂購人資料</legend>
+        <div class="ts-grid is-2-columns">
+          <div class="column">
+            <div class="ts-text is-label">訂購人姓名</div>
+            <div class="ts-space is-small"></div>
+            <div class="ts-input is-fluid">
+              <input type="text">
+            </div>
+          </div>
+          <div class="column">
+            <div class="ts-text is-label">訂購人信箱</div>
+            <div class="ts-space is-small"></div>
+            <div class="ts-input is-fluid">
+              <input type="email">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="ts-space"></div>
+      <fieldset class="ts-fieldset">
+        <legend>商品資料</legend>
+        <div class="ts-grid is-2-columns">
+          <div class="column">
+            <div class="ts-text is-label">商品名稱</div>
+            <div class="ts-space is-small"></div>
+            <div class="ts-input is-fluid">
+              <input type="text">
+            </div>
+          </div>
+          <div class="column">
+            <div class="ts-text is-label">商品金額</div>
+            <div class="ts-space is-small"></div>
+            <div class="ts-input is-fluid">
+              <input type="number">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="ts-space"></div>
+      <div class="ts-space"></div>
+      <button class="ts-button">送出</button>
+    </form>
+
 </body>
 
 </html>
