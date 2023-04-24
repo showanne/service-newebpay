@@ -5,8 +5,8 @@
   <title>
     <%= title %>
   </title>
-  <link rel="stylesheet" href="./tocas/tocas.min.css">
-  <script src="./tocas/tocas.min.js"></script>
+  <link rel="stylesheet" href="/tocas/tocas.min.css">
+  <script src="/tocas/tocas.min.js"></script>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.6/axios.min.js"></script>
 </head>
@@ -14,7 +14,7 @@
 <body>
   <div id="app">
     <form @submit.prevent="createOrder">
-      <!-- @submit.prevent 不使用表單送出資覅，改用 axios 送資料 -->
+      <!-- @submit.prevent 不使用表單送出資料，改用 axios 送資料 -->
       <!-- <fieldset class="ts-fieldset">
         <legend>額外附註</legend>
         <div class="ts-list is-unordered">
