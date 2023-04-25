@@ -53,12 +53,12 @@ router.get('/getOrder/:id',  function(req, res) {
 })
 
 router.post('/mpg_gateway_return_url', function(req, res) {
-  const data = req.data;
+  const data = req.body;
   console.log('/mpg_gateway_return_url', data);
   res.render('return', { title: '付款成功' });
 })
 router.post('/mpg_gateway_notify_url', function(req, res) {
-  const data = req.data;
+  const data = req.body;
   console.log('/mpg_gateway_notify_url', data);
   res.end();
 })
