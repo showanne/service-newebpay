@@ -52,6 +52,15 @@ router.get('/getOrder/:id',  function(req, res) {
   });
 })
 
+router.post('/mpg_gateway_return_url', function(req, res) {
+  const data = req.data;
+  console.log('/mpg_gateway_return_url', data);
+})
+router.post('/mpg_gateway_notify_url', function(req, res) {
+  const data = req.data;
+  console.log('/mpg_gateway_notify_url', data);
+})
+
 module.exports = router;
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
