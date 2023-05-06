@@ -34,10 +34,10 @@
         // this.orderId = urlParams.get('order')
         // console.log(urlParams.get('order'));
         const apiUrl = `/mpg_gateway_return_url`
-        const res = await axios.get(apiUrl)
+        const res = await axios.post(apiUrl)
         console.log('return page', res);
-        // this.order = res.data
-        // console.log(this.order);
+        this.order = res.data
+        console.log(this.order);
       }
     }
 
