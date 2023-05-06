@@ -58,9 +58,9 @@ router.post('/mpg_gateway_return_url', function(req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.table(info.Result);
+  console.table('/mpg_gateway_return_url', info.Result);
   const order = info.Result
-  
+
   // 取出訂單資料
   console.log(orders[info.Result.MerchantOrderNo]);
 
@@ -75,7 +75,7 @@ router.post('/mpg_gateway_notify_url', function(req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.table(info.Result);
+  console.table('/mpg_gateway_notify_url', info.Result);
   console.log(info, info.Result.MerchantOrderNo);
   // 取出訂單資料
   console.log(orders[info.Result.MerchantOrderNo]);

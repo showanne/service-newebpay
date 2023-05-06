@@ -34,9 +34,9 @@
         // console.log(urlParams.get('order'));
         const apiUrl = `/mpg_gateway_return_url`
         const res = await axios.post(apiUrl)
-        console.log(res);
-        this.order = res.data
-        console.log(this.order);
+        console.log('return page', res);
+        // this.order = res.data
+        // console.log(this.order);
       }
     }
 
