@@ -20,4 +20,26 @@
   </div>
 </body>
 
+  <script type="module">
+    import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js"
+
+    const app = {
+      data() {
+        return {
+          order: {}
+        }
+      },
+      async mounted() { // 進入頁面時觸發取得資料
+        // this.orderId = urlParams.get('order')
+        // console.log(urlParams.get('order'));
+        const apiUrl = `/mpg_gateway_return_url`
+        const res = await axios.post(apiUrl)
+        console.log(res);
+        this.order = res.data
+        console.log(this.order);
+      }
+    }
+
+    createApp(app).mount('#app')
+  </script>
 </html>

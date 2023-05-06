@@ -55,7 +55,19 @@ router.get('/getOrder/:id',  function(req, res) {
 router.post('/mpg_gateway_return_url', function(req, res) {
   const data = req.body;
   console.log('/mpg_gateway_return_url', data);
+
+  // 將回傳的資料解密
+  const info = create_mpg_aes_decrypt(data.TradeInfo)
+  console.table(info.Result);
+  const order = info.Result
+  
+  // 取出訂單資料
+  console.log(orders[info.Result.MerchantOrderNo]);
+
   res.render('return', { title: '付款成功' });
+  res.json({
+    order
+  });
 })
 router.post('/mpg_gateway_notify_url', function(req, res) {
   const data = req.body;
@@ -70,15 +82,6 @@ router.post('/mpg_gateway_notify_url', function(req, res) {
 
   res.end();
 })
-
-const data = {
-  Status: 'SUCCESS',
-  MerchantID: 'MS148719690',
-  Version: '1.5',
-  TradeInfo:  'c163f94481f7d1fd4e22cc3d4fc3d3958bf62e4e41fbc59e1038c85b4dc93f02745513c0b597815006c4e3170942c8ae98c6932ad666d51cab2846674760374c6f75184c7d9c9424ae86fd6654f7772c6be066341bdd6c85fe4cf4b0853e290fd9adf7e01b49436e454f1f5789db0d270c0a33147e6c195b10f3681f02509539258680e1f44be141920fd1f43e6d89cc14551313dc0c4e93705b71df231f0e1c27e7ba6c32cc34f9d1f835c941ccf85a832e45271d2a21153330cc5c92c03e3081325b2a7c95cd6eb799cfe980a59d8b73004486d38658c339c051cc4ce81e338814a34e6acd2adbccc2ebac7e61b3f75c92be2c4bc9c7c1925d7ebfdd3829d8dcaa92a13214333b084a1f25464388387889b79c446aaeb843a8d3d6b8b1701b0c4a7ca0dabd6034d0dc67d67b53a34e2711e97e8ae21fee48e08cf9ea08cb4a531ec9685d6ca2947feab5daba2f26d4bd6f19425237d3746f30287c78f2cb1f0bed0391851d3b9b372bbfc74d1d89cb959a5a02e2cc36a98d4c681de420e2279c1bb4f6746c8bbf52f7568ea46f1284f4a77bf9ab57682f46d093c02bf8950b',
-  TradeSha: 'AFE222073590DB7EEBDF70C2989BD891EAEA1ED802C187AD2087F5E5B78C0EAE'
-}
-
 
 module.exports = router;
 
