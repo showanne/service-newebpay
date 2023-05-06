@@ -64,9 +64,9 @@ router.post('/mpg_gateway_return_url', function(req, res) {
   // 取出訂單資料
   console.log(orders[info.Result.MerchantOrderNo]);
 
-  res.render('return', { title: '付款成功' });
-  res.json({
-    order
+  res.render('return', {
+    title: '付款成功',
+    formData: order
   });
 })
 router.post('/mpg_gateway_notify_url', function(req, res) {
