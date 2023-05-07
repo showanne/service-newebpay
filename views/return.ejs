@@ -24,6 +24,7 @@
     <p class="ts-text">商品： <%= formData.itemDesc %> </p>
     <!-- <p class="ts-text">付款方式： <%= formData.PaymentType %> </p>
     <p class="ts-text">交易狀態： <%= formData.TradeStatus %> </p> -->
+    {{ order }}
   </div>
 </body>
 
@@ -39,18 +40,18 @@
       async mounted() { // 進入頁面時觸發取得資料
       //   // this.orderId = urlParams.get('order')
       //   // console.log(urlParams.get('order'));
-      //   const apiUrl = `/mpg_gateway_return_url`
-      //   const res = await axios.get(apiUrl)
-      //   console.log('return page', res);
-      //   this.order = res.data
-      //   console.log(this.order);
+        const apiUrl = `/mpg_gateway_return_url`
+        const res = await axios.get(apiUrl)
+        console.log('return page', res);
+        this.order = res.data
+        console.log(this.order);
 
-      const params = new URLSearchParams(window.location.search);
-      const merchantID = params.get('merchantOrderNo');
-      const amt = params.get('amt');
-      const tradeNo = params.get('itemDesc');
-      // 取得其他回傳資料
-        console.log(params, merchantID, amt, tradeNo);
+      // const params = new URLSearchParams(window.location.search);
+      // const merchantID = params.get('merchantOrderNo');
+      // const amt = params.get('amt');
+      // const tradeNo = params.get('itemDesc');
+      // // 取得其他回傳資料
+      //   console.log(params, merchantID, amt, tradeNo);
       },
       // methods: {
       //   async getReturnOrder() {
