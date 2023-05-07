@@ -40,10 +40,10 @@ router.get('/getOrder/:id',  function(req, res) {
   console.log('/getOrder/:id', orders[id]);
   
   const aesEncrypt = create_mpg_aes_encrypt(order) // 交易資料
-  console.log('aesEncrypt：', aesEncrypt);
+  // console.log('aesEncrypt：', aesEncrypt);
   
   const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
-  console.log('shaEncrypt：', shaEncrypt);
+  // console.log('shaEncrypt：', shaEncrypt);
 
   res.json({
     order, // 將整筆訂單資料傳給前端
@@ -66,8 +66,11 @@ router.post('/mpg_gateway_return_url', function(req, res) {
   orders[info.Result.MerchantOrderNo].payment_status = info.Status
   console.log('Order Return', orders[info.Result.MerchantOrderNo]);
 
-  res.render('return', { title: '付款成功' });
-  res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
+  res.render('return', {
+    title: info.Message,
+    formData: orders[info.Result.MerchantOrderNo]
+  });
+  // res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
 })
 
 // 藍新金流通知付款完成 /?回傳進資料庫

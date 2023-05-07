@@ -16,11 +16,14 @@
     <div class="ts-header is-start-icon">
       <span class="ts-icon is-thumbs-up"></span>
       <%= title %>
+      交易結果
     </div>
-    <span class="ts-text">{{ order.name }}</span><br>
-    <span class="ts-text">{{ order.email }}</span><br>
-    <span class="ts-text">{{ order.itemDesc }}</span><br>
-    <span class="ts-text">{{ order.amt }}</span><br>
+    <p class="ts-text">商家代號： <%= formData.MerchantID %> </p>
+    <p class="ts-text">金額： <%= formData.Amt %> </p>
+    <p class="ts-text">交易編號： <%= formData.TradeNo %> </p>
+    <p class="ts-text">付款日期： <%= formData.PaymentDate %> </p>
+    <p class="ts-text">付款方式： <%= formData.PaymentType %> </p>
+    <p class="ts-text">交易狀態： <%= formData.TradeStatus %> </p>
   </div>
 </body>
 
@@ -42,16 +45,16 @@
       //   this.order = res.data
       //   console.log(this.order);
       // },
-      methods: {
-        async getReturnOrder() {
-          const apiUrl = '/mpg_gateway_return_url'
-          const res = await axios.post(apiUrl);
-          console.log('return page', res);
-          this.order = res.data
-          console.log(this.order);
-          // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
-        }
-      }
+      // methods: {
+      //   async getReturnOrder() {
+      //     const apiUrl = '/mpg_gateway_return_url'
+      //     const res = await axios.post(apiUrl);
+      //     console.log('return page', res);
+      //     this.order = res.data
+      //     console.log(this.order);
+      //     // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
+      //   }
+      // }
     }
 
     createApp(app).mount('#app')
