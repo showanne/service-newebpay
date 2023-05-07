@@ -63,10 +63,7 @@ router.post('/mpg_gateway_return_url', function(req, res) {
 
   // 取出訂單資料，將交易結果傳進資料庫
   // console.log(orders[info.Result.MerchantOrderNo]);
-  orders[info.Result.MerchantOrderNo] = {
-    // ...info.Result,
-    payment_status: info.Status
-  }
+  orders[info.Result.MerchantOrderNo].payment_status = info.Status
   console.log('Order Return', orders[info.Result.MerchantOrderNo]);
 
   res.render('return', { title: '付款成功' });
