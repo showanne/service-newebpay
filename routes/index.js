@@ -52,6 +52,7 @@ router.get('/getOrder/:id',  function(req, res) {
   });
 })
 
+// 藍新金流通知交易資訊，前端顯示交易有成功
 router.post('/mpg_gateway_return_url', function(req, res) {
   const data = req.body;
   console.log('/mpg_gateway_return_url', data);
@@ -59,16 +60,20 @@ router.post('/mpg_gateway_return_url', function(req, res) {
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
   // console.table('/mpg_gateway_return_url', info.Result);
-  const order = info.Result
 
-  // 取出訂單資料
-  console.log(orders[info.Result.MerchantOrderNo]);
+  // 取出訂單資料，將交易結果傳進資料庫
+  // console.log(orders[info.Result.MerchantOrderNo]);
+  orders[info.Result.MerchantOrderNo] = {
+    // ...info.Result,
+    payment_status: info.Status
+  }
+  console.log('Order Return', orders[info.Result.MerchantOrderNo]);
 
-  res.render('return', {
-    title: '付款成功',
-    formData: order
-  });
+  res.render('return', { title: '付款成功' });
+  res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
 })
+
+// 藍新金流通知付款完成 /?回傳進資料庫
 router.post('/mpg_gateway_notify_url', function(req, res) {
   const data = req.body;
   console.log('/mpg_gateway_notify_url', data);

@@ -33,14 +33,24 @@
           order: {}
         }
       },
-      async mounted() { // 進入頁面時觸發取得資料
-        // this.orderId = urlParams.get('order')
-        // console.log(urlParams.get('order'));
-        const apiUrl = `/mpg_gateway_return_url`
-        const res = await axios.post(apiUrl)
-        console.log('return page', res);
-        this.order = res.data
-        console.log(this.order);
+      // async mounted() { // 進入頁面時觸發取得資料
+      //   // this.orderId = urlParams.get('order')
+      //   // console.log(urlParams.get('order'));
+      //   const apiUrl = `/mpg_gateway_return_url`
+      //   const res = await axios.get(apiUrl)
+      //   console.log('return page', res);
+      //   this.order = res.data
+      //   console.log(this.order);
+      // },
+      methods: {
+        async getReturnOrder() {
+          const apiUrl = '/mpg_gateway_return_url'
+          const res = await axios.post(apiUrl);
+          console.log('return page', res);
+          this.order = res.data
+          console.log(this.order);
+          // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
+        }
       }
     }
 
