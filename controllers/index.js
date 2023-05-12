@@ -64,7 +64,7 @@ async function getOrder (req, res) {
   //   { new: true }
   // );
 
-  Order.findOneAndUpdate(
+  const checkOrder = await Order.findOneAndUpdate(
     { order_id: id },
     {
       $set: {
@@ -75,14 +75,14 @@ async function getOrder (req, res) {
     { new: true }
   );
 
-  console.log('order: ', await Order.find({ order_id: id }));
+  console.log('order: ', checkOrder);
     // TODO: aesEncrypt 及 shaEncrypt 加入訂單 DB 內
   try {
     console.log(order);
     res.status(200).send({
       success: true,
       message: '取得訂單資料',
-      order
+      checkOrder
     })
   } catch (error) {
     res.status(400).send({

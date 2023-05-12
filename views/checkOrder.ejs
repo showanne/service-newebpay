@@ -70,7 +70,7 @@
           <div class="ts-text is-label">aesEncrypt</div>
           <div class="ts-space is-small"></div>
           <div class="ts-input is-fluid">
-            <input type="text" name="TradeInfo" :value="order.aesEncrypt" readonly>
+            <input type="text" name="TradeInfo" :value="order.newebpay_aes_encrypt" readonly>
           </div>
         </div>
       </div>
@@ -79,7 +79,7 @@
           <div class="ts-text is-label">shaEncrypt</div>
           <div class="ts-space is-small"></div>
           <div class="ts-input is-fluid">
-            <input type="text" name="TradeSha" :value="order.shaEncrypt" readonly>
+            <input type="text" name="TradeSha" :value="order.newebpay_sha_encrypt" readonly>
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@
         const apiUrl = `/getOrder/${this.orderId}`
         const res = await axios.get(apiUrl)
         console.log(res);
-        this.order = res.data.order[0]
+        this.order = res.data.checkOrder
         console.log(this.order);
       }
     }
