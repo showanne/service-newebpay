@@ -46,10 +46,10 @@ async function createOrder (req, res, next) {
 // getOrder 確認訂單 - GET /getOrder/:id
 async function getOrder (req, res) {
   const { id } = req.params // 取得附在網址上的訂單編號
-  const order = orders[id]
+  const order = await Order.find({ order_id: id })
   // const paramsString = genDataChain(order) // 組成藍新金流所需字串
   // console.log(id, paramsString);
-  console.log('/getOrder/:id', orders[id]);
+  // console.log('/getOrder/:id', order);
   
   const aesEncrypt = create_mpg_aes_encrypt(order) // 交易資料
   // console.log('aesEncrypt：', aesEncrypt);
@@ -57,11 +57,45 @@ async function getOrder (req, res) {
   const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
   // console.log('shaEncrypt：', shaEncrypt);
 
-  res.json({
-    order, // 將整筆訂單資料傳給前端
-    aesEncrypt,
-    shaEncrypt
-  });
+  // Order.findOneAndUpdate(
+  //   { order_id: id }, 
+  //   { $set:{ newebpay_aes_encrypt: aesEncrypt }},
+  //   { $set:{ newebpay_sha_encrypt: shaEncrypt }},
+  //   { new: true }
+  // );
+
+  Order.findOneAndUpdate(
+    { order_id: id },
+    {
+      $set: {
+        newebpay_aes_encrypt: aesEncrypt,
+        newebpay_sha_encrypt: shaEncrypt,
+      },
+    },
+    { new: true }
+  );
+
+  console.log('order: ', await Order.find({ order_id: id }));
+    // TODO: aesEncrypt 及 shaEncrypt 加入訂單 DB 內
+  try {
+    console.log(order);
+    res.status(200).send({
+      success: true,
+      message: '取得訂單資料',
+      order
+    })
+  } catch (error) {
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
+  }
+  
+  // res.json({
+  //   order, // 將整筆訂單資料傳給前端
+  //   aesEncrypt,
+  //   shaEncrypt
+  // });
 }
 
 // mpg_gateway_return_url 藍新金流通知交易資訊 - 藍新以POST mpg_return
@@ -103,7 +137,7 @@ async function mpg_notify (req, res) {
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
 function genDataChain(order) {
-  return `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=${RespondType}&TimeStamp=${order.timeStamp}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.merchantOrderNo}&Amt=${order.amt}&ItemDesc=${encodeURIComponent(order.itemDesc)}&Email=${encodeURIComponent(order.email)}`;
+  return `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=${RespondType}&TimeStamp=${order.order_id}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.payment_price}&ItemDesc=${encodeURIComponent(order.project)}&Email=${encodeURIComponent(order.user_email)}`;
 }
 
 // 使用 aes 加密

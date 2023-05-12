@@ -41,7 +41,8 @@
           <div class="ts-text is-label">訂單編號</div>
           <div class="ts-space is-small"></div>
           <div class="ts-input is-fluid">
-            <input type="text" name="MerchantOrderNo" :value="order.order.merchantOrderNo" readonly>
+            <input type="text" name="MerchantOrderNo" :value="order.order_id
+            " readonly>
           </div>
         </div>
       </div>
@@ -51,7 +52,8 @@
           <div class="ts-text is-label">時間</div>
           <div class="ts-space is-small"></div>
           <div class="ts-input is-fluid">
-            <input type="text" name="TimeStamp" :value="order.order.timeStamp" readonly>
+            <input type="text" name="TimeStamp" :value="order.order_id
+            " readonly>
           </div>
         </div>
         <div class="column">
@@ -89,14 +91,14 @@
             <div class="ts-text is-label">訂購人姓名</div>
             <div class="ts-space is-small"></div>
             <div class="ts-input is-fluid">
-              <input type="text" :value="order.order.name" readonly>
+              <input type="text" :value="order.user_name" readonly>
             </div>
           </div>
           <div class="column">
             <div class="ts-text is-label">訂購人信箱</div>
             <div class="ts-space is-small"></div>
             <div class="ts-input is-fluid">
-              <input type="email" name="Email" :value="order.order.email" readonly>
+              <input type="email" name="Email" :value="order.user_email" readonly>
             </div>
           </div>
         </div>
@@ -109,14 +111,14 @@
             <div class="ts-text is-label">商品名稱</div>
             <div class="ts-space is-small"></div>
             <div class="ts-input is-fluid">
-              <input type="text" :value="order.order.itemDesc" readonly>
+              <input type="text" :value="order.project" readonly>
             </div>
           </div>
           <div class="column">
             <div class="ts-text is-label">商品金額</div>
             <div class="ts-space is-small"></div>
             <div class="ts-input is-fluid">
-              <input type="number" name="Amt" v-model.number="order.order.amt">
+              <input type="number" name="Amt" v-model.number="order.payment_price">
               <!-- v-model.number 避免型別跑掉 -->
             </div>
           </div>
@@ -136,7 +138,6 @@
         return {
           orderId: '',
           order: {
-            order: {}
           }
         }
       },
@@ -147,7 +148,7 @@
         const apiUrl = `/getOrder/${this.orderId}`
         const res = await axios.get(apiUrl)
         console.log(res);
-        this.order = res.data
+        this.order = res.data.order[0]
         console.log(this.order);
       }
     }

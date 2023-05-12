@@ -59,13 +59,11 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0, // 預設 0-未付款 (0-未付款 / 1-待付款 / 2-付款完成 / 3-付款失敗 / 4-取消交易 ... )
   },
-  newebpay_tokens: {
-    type: [
-      {
-        aes_encrypt: String,
-        sha_encrypt: String
-      },
-    ],
+  newebpay_aes_encrypt: {
+    type: String
+  },
+  newebpay_sha_encrypt: {
+    type: String
   }
 });
 const Order = mongoose.model('Order', orderSchema);
