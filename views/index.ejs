@@ -111,7 +111,8 @@
           const apiUrl = '/createOrder'
           const res = await axios.post(apiUrl, this.order);
           console.log(res);
-          window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
+          // console.log(res.data.newOrder.order_id);
+          window.location.href = `/checkOrder/?order=${res.data.newOrder.order_id}` // 轉址到該筆訂單的確認頁面
         }
       }
     }

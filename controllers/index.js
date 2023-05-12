@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const Order = require('../model/orderModels');
 
-const orders = {} // 暫存訂單資料
+// const orders = {} // 暫存訂單資料
 const RespondType = 'JSON'
 
 // createOrder 建立訂單 - POST /createOrder
@@ -10,14 +10,37 @@ async function createOrder (req, res, next) {
   const timeStamp = Math.round(new Date().getTime() / 1000) // 蘭新金流有限制時間戳長度 10 位數
   console.log(orderData, timeStamp);
 
-  // 使用時間戳當作商店訂單編號
-  orders[timeStamp] = {
-    ...orderData, // 將前端的資料取出來
-    timeStamp,
-    merchantOrderNo: timeStamp
+  try {
+    const newOrder = await Order.create({
+      user_name: orderData.name,
+      user_email: orderData.email,
+      project: orderData.itemDesc,
+      order_id: timeStamp, // 使用時間戳當作商店訂單編號
+      payment_price: orderData.amt,
+      // payment_method: 'WebATM'
+    })
+    console.log(newOrder);
+    res.status(200).send({
+      success: true,
+      message: '建立訂單成功',
+      newOrder
+    })
+  } catch (error) {
+    console.error(error.message);
+    // if (error instanceof MongoServerError) {} // 關鍵字判斷錯誤物件是否為 MongoServerError
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
   }
-  console.log('/createOrder', orders);
-  res.json(orders[timeStamp]); // 將整筆訂單資料傳給前端
+  
+  // orders[timeStamp] = {
+  //   ...orderData, // 將前端的資料取出來
+  //   timeStamp,
+  //   merchantOrderNo: timeStamp
+  // }
+  // console.log('/createOrder', orders);
+  // res.json(orders[timeStamp]); // 將整筆訂單資料傳給前端
 }
 
 // getOrder 確認訂單 - GET /getOrder/:id

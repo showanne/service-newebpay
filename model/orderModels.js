@@ -9,15 +9,15 @@ const orderSchema = new mongoose.Schema({
   user_email: {
     type: String,
     required: [true, "電子郵件未填寫"],
-    unique: true,
-    lowercase: true,
+    // unique: true,
+    // lowercase: true,
     // 自訂驗證，安裝套件 npm i validator
-    validate: {
-      validator() {
-        return validator.isEmail(value);
-      },
-      message: "信箱格式不正確",
-    },
+    // validate: {
+    //   validator() {
+    //     return validator.isEmail(value);
+    //   },
+    //   message: "信箱格式不正確",
+    // },
   },
   project: {
     type: String,
@@ -30,6 +30,10 @@ const orderSchema = new mongoose.Schema({
   order_create_date: { // 訂單建立日期
     type: Date,
     default: Date.now()
+  },
+  order_id: {
+    type: String,
+    required: true,
   },
   order_status: { // 訂單狀態
     type: Number,
@@ -48,7 +52,7 @@ const orderSchema = new mongoose.Schema({
     // 付款方式
     type: String,
     enum: ["WebATM", "ATM轉帳", "條碼繳費",  "超商代碼繳費", "信用卡"],
-    required: true,
+    // required: true,
   },
   payment_status: {
     // 付款狀態
