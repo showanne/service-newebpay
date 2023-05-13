@@ -154,6 +154,15 @@ async function mpg_notify (req, res) {
   console.log('/mpg_gateway_notify_url', info.Result);
   // console.log(info, info.Result.MerchantOrderNo);
 
+  // let payment_status = 0
+  // let order_status = 0
+  // if (info.Status == 'SUCCESS') {
+  //   payment_status = 2 // 付款完成
+  //   order_status = 2 // 已完成
+  // } else {
+  //   payment_status = 1 // 待付款
+  //   order_status = 1 // 處理中
+  // }
   const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
   console.log('order', order);
   
