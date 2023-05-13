@@ -179,6 +179,20 @@ async function mpg_notify (req, res) {
 
   console.log('Order Notify', order);
 
+  try {
+    console.log('success', order);
+    res.status(200).send({
+      success: true,
+      message: '更新訂單狀態',
+      order
+    })
+  } catch (error) {
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
+  }
+
   res.end();
 }
 
