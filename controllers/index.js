@@ -152,65 +152,76 @@ async function mpg_notify (req, res) {
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
   console.log('/mpg_gateway_notify_url', info.Result);
+
+  // 回傳的資料 /mpg_gateway_notify_url {
+  //   MerchantID: 'MS148719690',
+  //   Amt: 100,
+  //   TradeNo: '23051323503404758', / TradeNo 藍新金流交易序號
+  //   MerchantOrderNo: '1683993023',
+  //   RespondType: 'JSON',
+  //   IP: '123.193.181.242', / THINK: 可以再看看需不需要存資料庫
+  //   EscrowBank: 'HNCB', / EscrowBank 款項保管銀行 <- HNCB = 華南銀行 / THINK: 可以再看看需不需要存資料庫
+  //   PaymentType: 'WEBATM', / PaymentType 支付方式
+  //   PayTime: '2023-05-1323:50:34', / PayTime 支付完成時間 
+  //   PayerAccount5Code: '12345', / PayerAccount5Code 付款人金融機構帳號末五碼
+  //   PayBankCode: '809' / PayBankCode 付款人金融機構代碼
+  // }
+
+  // 檢查該筆訂單存不存在
   // console.log(info, info.Result.MerchantOrderNo);
-
-  // let payment_status = 0
-  // let order_status = 0
-  // if (info.Status == 'SUCCESS') {
-  //   payment_status = 2 // 付款完成
-  //   order_status = 2 // 已完成
-  // } else {
-  //   payment_status = 1 // 待付款
-  //   order_status = 1 // 處理中
-  // }
   const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
-  console.log('order', order);
-  
-  // let payment_status = 0
-  // let order_status = 0
-  // if (info.Status == 'SUCCESS') {
-  //   payment_status = 2 // 付款完成
-  //   order_status = 2 // 已完成
-  // } else {
-  //   payment_status = 1 // 待付款
-  //   order_status = 1 // 處理中
-  // }
+  // console.log('order', order);
+  if (!order) {
+    res.status(400).send({
+      success: true,
+      message: '找不到訂單',
+      error: error.message
+    })
+    return
+  }
 
-  // // 取出訂單資料
-  // // console.log(orders[info.Result.MerchantOrderNo]);
-  // const order = await Order.findOneAndUpdate(
-  //   { order_id: info.Result.MerchantOrderNo },
-  //   {
-  //     $set: {
-  //       payment_status: payment_status, // 更新付款狀態
-  //       order_status: order_status, // 更新訂單狀態
-  //     },
-  //   },
-  //   { new: true }
-  // );
+  // 取出訂單資料並將藍新金流回傳的交易結果更新
+  // console.log(orders[info.Result.MerchantOrderNo]);
+  const updateOrder = await Order.findOneAndUpdate(
+    { order_id: info.Result.MerchantOrderNo },
+    {
+      $set: {
+        order_status: 2, // 更新訂單狀態為 2-已完成
+        order_final_date: info.Result.PayTime,
+        payment_method: info.Result.PaymentType,
+        payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
+        newebpay_tradeNo: info.Result.TradeNo,
+        newebpay_escrowBank: info.Result.PayBankCode,
+        newebpay_payBankCode: info.Result.PayBankCode,
+        newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
+        newebpay_payTime: info.Result.PayTime,
+      },
+    },
+    { new: true }
+  );
 
-  // console.log('Order Notify', order);
+  console.log('Order Notify', updateOrder);
 
-  // try {
-  //   console.log('success', order);
-  //   res.status(200).send({
-  //     success: true,
-  //     message: '更新訂單狀態',
-  //     order
-  //   })
-  // } catch (error) {
-  //   res.status(400).send({
-  //     success: true,
-  //     message: error.message
-  //   })
-  // }
+  try {
+    console.log('success', updateOrder);
+    res.status(200).send({
+      success: true,
+      message: '更新訂單狀態',
+      updateOrder
+    })
+  } catch (error) {
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
+  }
 
   res.end();
 }
 
 // TODO: 查詢指定訂單資料 - 用訂單編號來發動單筆查詢 藍新金流API
 async function getOrderById (req, res) {
-  
+
 }
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式

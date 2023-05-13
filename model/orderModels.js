@@ -51,13 +51,55 @@ const orderSchema = new mongoose.Schema({
   payment_method: {
     // 付款方式
     type: String,
-    enum: ["WebATM", "ATM轉帳", "條碼繳費",  "超商代碼繳費", "信用卡"],
+    enum: ["WEBATM", "VACC", "BARCODE",  "CVS", "CREDIT"],
     // required: true,
+    // NOTE: 藍新金流以英文代號方式回應 PaymentType 支付方式
+    // CREDIT=信用卡付款
+    // VACC=銀行 ATM 轉帳付款
+    // WEBATM=網路銀行轉帳付款
+    // BARCODE=超商條碼繳費
+    // CVS=超商代碼繳費
+    // LINEPAY=LINE Paya 付款
+    // ESUNWALLET=玉山 Wallet
+    // TAIWANPAY=台灣 Pay
+    // CVSCOM = 超商取貨付款
   },
   payment_status: {
     // 付款狀態
     type: Number,
     default: 0, // 預設 0-未付款 (0-未付款 / 1-待付款 / 2-付款完成 / 3-付款失敗 / 4-取消交易 ... )
+    
+    // TODO: 查詢指定訂單資料時，會回傳的值
+    // NOTE: 藍新金流以數字回應 TradeStatus 支付狀態：
+    // 0=未付款
+    // 1=付款成功
+    // 2=付款失敗
+    // 3=取消付款
+    // 6=退款
+  },
+  newebpay_tradeNo: {
+    // 藍新金流交易序號
+    type: String
+  },
+  newebpay_IP: {
+    // 在藍新金流交易時付款人的 IP
+    type: String
+  },
+  newebpay_escrowBank: {
+    // 款項保管銀行 <- HNCB = 華南銀行
+    type: String
+  },
+  newebpay_payBankCode: {
+    // 付款人金融機構代碼
+    type: String
+  },
+  newebpay_payerAccount5Code: {
+    // 付款人金融機構帳號末五碼
+    type: String
+  },
+  newebpay_payTime: {
+    // 藍新金流定義：收到款項的支付完成時間
+    type: Date
   },
   newebpay_aes_encrypt: {
     type: String
