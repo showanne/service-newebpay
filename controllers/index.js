@@ -208,12 +208,17 @@ async function mpg_notify (req, res) {
   res.end();
 }
 
+// TODO: 查詢指定訂單資料 - 用訂單編號來發動單筆查詢 藍新金流API
+async function getOrderById (req, res) {
+  
+}
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
 function genDataChain(order) {
   // console.log('genDataChain(order):', order[0]);
   const orderData = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=${RespondType}&TimeStamp=${order[0].order_id}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order[0].order_id}&Amt=${order[0].payment_price}&ItemDesc=${encodeURIComponent(order[0].project)}&Email=${encodeURIComponent(order[0].user_email)}`
   // console.log('genDataChain:', orderData);
+  // TODO: 有空再實作 "CustomerURL 商店取號網址"，要將此資訊加入 TradeInfo，一起傳給藍新
   return orderData;
 }
 
