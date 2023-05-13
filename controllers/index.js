@@ -153,7 +153,7 @@ async function mpg_notify (req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.log('/mpg_gateway_notify_url', info.Result);
+  console.log('/mpg_gateway_notify_url', info.Result.PayTime, info.Result);
 
   // 回傳的資料 /mpg_gateway_notify_url {
   //   MerchantID: 'MS148719690',
@@ -191,8 +191,8 @@ async function mpg_notify (req, res) {
           newebpay_tradeNo: info.Result.TradeNo,
           newebpay_escrowBank: info.Result.PayBankCode,
           newebpay_payBankCode: info.Result.PayBankCode,
-          newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
-          newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
+          newebpay_payerAccount5Code: info.Result.PayerAccount5Code
+          // newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
         },
       },
       { new: true }
@@ -209,7 +209,7 @@ async function mpg_notify (req, res) {
     //   updateOrder
     // })
   } catch (error) {
-    console.log(error.message);
+    console.log('error', error.message);
 
     res.sendStatus(500);
     
