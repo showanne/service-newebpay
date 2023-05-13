@@ -194,7 +194,7 @@ async function mpg_notify (req, res) {
         newebpay_escrowBank: info.Result.PayBankCode,
         newebpay_payBankCode: info.Result.PayBankCode,
         newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
-        newebpay_payTime: new Date(info.Result.PayTime).toISOString(),
+          newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
       },
     },
     { new: true }
