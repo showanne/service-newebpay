@@ -100,14 +100,46 @@ async function mpg_return (req, res) {
   const info = create_mpg_aes_decrypt(data.TradeInfo)
   // console.table('/mpg_gateway_return_url', info.Result);
 
+  let payment_status = 0
+  if (info.Status == 'SUCCESS') {
+    payment_status = 1 // 待付款
+  } else {
+    payment_status = 2 // 付款失敗
+  }
+
   // 取出訂單資料，將交易結果傳進資料庫
   // console.log(orders[info.Result.MerchantOrderNo]);
-  orders[info.Result.MerchantOrderNo].payment_status = info.Status
-  console.log('Order Return', orders[info.Result.MerchantOrderNo]);
+  const order = await Order.findOneAndUpdate(
+    { order_id: info.Result.MerchantOrderNo },
+    {
+      $set: {
+        payment_status: payment_status, // 更新付款狀態
+        order_status: 1 // 更新訂單狀態為 1-處理中
+      },
+    },
+    { new: true }
+  );
+  // orders[info.Result.MerchantOrderNo].payment_status = info.Status
+
+  console.log('Order Return', order);
+
+  try {
+    console.log('success', order);
+    res.status(200).send({
+      success: true,
+      message: '取得交易結果',
+      order
+    })
+  } catch (error) {
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
+  }
 
   res.render('return', {
-    title: info.Message,
-    formData: orders[info.Result.MerchantOrderNo]
+    title: info.Message
+    // formData: order
   });
   // res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
 }
@@ -121,8 +153,31 @@ async function mpg_notify (req, res) {
   const info = create_mpg_aes_decrypt(data.TradeInfo)
   console.table('/mpg_gateway_notify_url', info.Result);
   console.log(info, info.Result.MerchantOrderNo);
+
+  let payment_status = 0
+  let order_status = 0
+  if (info.Status == 'SUCCESS') {
+    payment_status = 2 // 付款完成
+    order_status = 2 // 已完成
+  } else {
+    payment_status = 1 // 待付款
+    order_status = 1 // 處理中
+  }
+
   // 取出訂單資料
-  console.log(orders[info.Result.MerchantOrderNo]);
+  // console.log(orders[info.Result.MerchantOrderNo]);
+  const order = await Order.findOneAndUpdate(
+    { order_id: info.Result.MerchantOrderNo },
+    {
+      $set: {
+        payment_status: payment_status, // 更新付款狀態
+        order_status: order_status, // 更新訂單狀態
+      },
+    },
+    { new: true }
+  );
+
+  console.log('Order Notify', order);
 
   res.end();
 }
