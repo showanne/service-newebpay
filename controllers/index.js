@@ -104,7 +104,7 @@ async function mpg_return (req, res) {
   if (info.Status == 'SUCCESS') {
     payment_status = 1 // 待付款
   } else {
-    payment_status = 2 // 付款失敗
+    payment_status = 3 // 付款失敗
   }
 
   // 取出訂單資料，將交易結果傳進資料庫
@@ -138,8 +138,8 @@ async function mpg_return (req, res) {
   }
 
   res.render('return', {
-    title: info.Message
-    // formData: order
+    title: info.Message,
+    formData: order
   });
   // res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
 }
