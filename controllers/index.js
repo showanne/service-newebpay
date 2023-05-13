@@ -153,7 +153,7 @@ async function mpg_notify (req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.log('/mpg_gateway_notify_url', info.Result.PayTime, info.Result);
+  console.log('/mpg_gateway_notify_url', info.Result);
 
   // 回傳的資料 /mpg_gateway_notify_url {
   //   MerchantID: 'MS148719690',
@@ -185,14 +185,14 @@ async function mpg_notify (req, res) {
       {
         $set: {
           order_status: 2, // 更新訂單狀態為 2-已完成
-          order_final_date: info.Result.PayTime,
+          order_final_date: new Date(),
           payment_method: info.Result.PaymentType,
           payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
           newebpay_tradeNo: info.Result.TradeNo,
           newebpay_escrowBank: info.Result.PayBankCode,
           newebpay_payBankCode: info.Result.PayBankCode,
-          newebpay_payerAccount5Code: info.Result.PayerAccount5Code
-          // newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
+          newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
+          newebpay_payTime: info.Result.PayTime // 詭異的日期格式 "2023-05-1402:20:43"
         },
       },
       { new: true }

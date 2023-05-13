@@ -99,7 +99,7 @@ const orderSchema = new mongoose.Schema({
   },
   newebpay_payTime: {
     // 藍新金流定義：收到款項的支付完成時間
-    type: Date
+    type: String // 詭異的日期格式 "2023-05-1402:20:43"
   },
   newebpay_aes_encrypt: {
     type: String
