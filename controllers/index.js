@@ -154,6 +154,9 @@ async function mpg_notify (req, res) {
   console.log('/mpg_gateway_notify_url', info.Result);
   // console.log(info, info.Result.MerchantOrderNo);
 
+  const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
+  console.log('order', order);
+  
   // let payment_status = 0
   // let order_status = 0
   // if (info.Status == 'SUCCESS') {
