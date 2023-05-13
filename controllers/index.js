@@ -200,8 +200,8 @@ async function mpg_notify (req, res) {
   
     console.log('Order Notify', updateOrder);
     
-    // 回傳 HTTP 狀態碼 200 表示接收成功
-    res.sendStatus(200);
+    // ChatGPT: 因為 notify_url 是藍新金流向你的伺服器發送的 HTTP POST 請求，而你的伺服器只需要處理此請求，不需要回應任何 HTTP 狀態碼。藍新金流不會因為接收到的回應碼是什麼而影響交易流程，所以不需要回應 200。
+    // res.sendStatus(200);
 
     // res.status(200).send({
     //   success: true,
@@ -211,7 +211,7 @@ async function mpg_notify (req, res) {
   } catch (error) {
     console.log('error', error.message);
 
-    res.sendStatus(500);
+    // res.sendStatus(500);
     
     // res.status(400).send({
     //   success: true,
