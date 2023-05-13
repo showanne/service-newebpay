@@ -171,39 +171,33 @@ async function mpg_notify (req, res) {
   // console.log(info, info.Result.MerchantOrderNo);
   const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
   if (!order) {
-    res.status(400).send({
-      success: true,
-      message: '找不到訂單',
-      error: error.message
-    })
     return
   }
   console.log('order', order);
 
-  // 取出訂單資料並將藍新金流回傳的交易結果更新
-  // console.log(orders[info.Result.MerchantOrderNo]);
-  const updateOrder = await Order.findOneAndUpdate(
-    { order_id: info.Result.MerchantOrderNo },
-    {
-      $set: {
-        order_status: 2, // 更新訂單狀態為 2-已完成
-        order_final_date: info.Result.PayTime,
-        payment_method: info.Result.PaymentType,
-        payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
-        newebpay_tradeNo: info.Result.TradeNo,
-        newebpay_escrowBank: info.Result.PayBankCode,
-        newebpay_payBankCode: info.Result.PayBankCode,
-        newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
-          newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
-      },
-    },
-    { new: true }
-  );
-
-  console.log('Order Notify', updateOrder);
-
   try {
-    console.log('success', updateOrder);
+    // 取出訂單資料並將藍新金流回傳的交易結果更新
+    // console.log(orders[info.Result.MerchantOrderNo]);
+    const updateOrder = await Order.findOneAndUpdate(
+      { order_id: info.Result.MerchantOrderNo },
+      {
+        $set: {
+          order_status: 2, // 更新訂單狀態為 2-已完成
+          order_final_date: info.Result.PayTime,
+          payment_method: info.Result.PaymentType,
+          payment_status: 2, // 更新付款狀態為 2-付款完成 / THINK: 貌似有收到 notify 就一定算成功交易？
+          newebpay_tradeNo: info.Result.TradeNo,
+          newebpay_escrowBank: info.Result.PayBankCode,
+          newebpay_payBankCode: info.Result.PayBankCode,
+          newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
+          newebpay_payTime: new Date(info.Result.PayTime.replace(' ', 'T') + 'Z').toISOString()
+        },
+      },
+      { new: true }
+    );
+  
+    console.log('Order Notify', updateOrder);
+    
     res.status(200).send({
       success: true,
       message: '更新訂單狀態',
