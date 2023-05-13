@@ -146,6 +146,8 @@ async function mpg_return (req, res) {
 
 // mpg_gateway_notify_url 藍新金流通知付款完成 - POST mpg_notify
 async function mpg_notify (req, res) {
+  console.log('/mpg_gateway_notify_url - req', req);
+
   const data = req.body;
   // console.log('/mpg_gateway_notify_url', data);
 
@@ -198,16 +200,23 @@ async function mpg_notify (req, res) {
   
     console.log('Order Notify', updateOrder);
     
-    res.status(200).send({
-      success: true,
-      message: '更新訂單狀態',
-      updateOrder
-    })
+    // 回傳 HTTP 狀態碼 200 表示接收成功
+    res.sendStatus(200);
+
+    // res.status(200).send({
+    //   success: true,
+    //   message: '更新訂單狀態',
+    //   updateOrder
+    // })
   } catch (error) {
-    res.status(400).send({
-      success: true,
-      message: error.message
-    })
+    console.log(error.message);
+
+    res.sendStatus(500);
+    
+    // res.status(400).send({
+    //   success: true,
+    //   message: error.message
+    // })
   }
 
   res.end();
