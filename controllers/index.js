@@ -52,17 +52,10 @@ async function getOrder (req, res) {
   // console.log('/getOrder/:id', order);
   
   const aesEncrypt = create_mpg_aes_encrypt(order) // 交易資料
-  // console.log('aesEncrypt：', aesEncrypt);
+  console.log('aesEncrypt：', aesEncrypt);
   
   const shaEncrypt = create_mpg_sha_encrypt(aesEncrypt) // 交易驗證用
-  // console.log('shaEncrypt：', shaEncrypt);
-
-  // Order.findOneAndUpdate(
-  //   { order_id: id }, 
-  //   { $set:{ newebpay_aes_encrypt: aesEncrypt }},
-  //   { $set:{ newebpay_sha_encrypt: shaEncrypt }},
-  //   { new: true }
-  // );
+  console.log('shaEncrypt：', shaEncrypt);
 
   const checkOrder = await Order.findOneAndUpdate(
     { order_id: id },
@@ -76,7 +69,7 @@ async function getOrder (req, res) {
   );
 
   console.log('order: ', checkOrder);
-    // TODO: aesEncrypt 及 shaEncrypt 加入訂單 DB 內
+
   try {
     console.log(order);
     res.status(200).send({
@@ -137,7 +130,10 @@ async function mpg_notify (req, res) {
 
 // 組成藍新金流所需字串 - 特別注意轉換字串時，ItemDesc、Email 會出現問題，要使用 encode 來轉換成藍新金流要的格式
 function genDataChain(order) {
-  return `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=${RespondType}&TimeStamp=${order.order_id}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order.order_id}&Amt=${order.payment_price}&ItemDesc=${encodeURIComponent(order.project)}&Email=${encodeURIComponent(order.user_email)}`;
+  // console.log('genDataChain(order):', order[0]);
+  const orderData = `MerchantID=${process.env.Newebpay_MerchantID}&RespondType=${RespondType}&TimeStamp=${order[0].order_id}&Version=${process.env.Newebpay_Version}&MerchantOrderNo=${order[0].order_id}&Amt=${order[0].payment_price}&ItemDesc=${encodeURIComponent(order[0].project)}&Email=${encodeURIComponent(order[0].user_email)}`
+  // console.log('genDataChain:', orderData);
+  return orderData;
 }
 
 // 使用 aes 加密
