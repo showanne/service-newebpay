@@ -170,7 +170,6 @@ async function mpg_notify (req, res) {
   // 檢查該筆訂單存不存在
   // console.log(info, info.Result.MerchantOrderNo);
   const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
-  // console.log('order', order);
   if (!order) {
     res.status(400).send({
       success: true,
@@ -179,6 +178,7 @@ async function mpg_notify (req, res) {
     })
     return
   }
+  console.log('order', order);
 
   // 取出訂單資料並將藍新金流回傳的交易結果更新
   // console.log(orders[info.Result.MerchantOrderNo]);
@@ -194,7 +194,7 @@ async function mpg_notify (req, res) {
         newebpay_escrowBank: info.Result.PayBankCode,
         newebpay_payBankCode: info.Result.PayBankCode,
         newebpay_payerAccount5Code: info.Result.PayerAccount5Code,
-        newebpay_payTime: info.Result.PayTime,
+        newebpay_payTime: new Date(info.Result.PayTime).toISOString(),
       },
     },
     { new: true }
