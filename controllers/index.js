@@ -99,12 +99,12 @@ async function mpg_return (req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.log('/mpg_gateway_return_url', info.Result);
+  // console.log('/mpg_gateway_return_url', info.Result);
 
   const orderId = info.Result.MerchantOrderNo
   // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
   const order_payment_status = await Order.find({ order_id: orderId })
-  console.log(order_payment_status.payment_status);
+  console.log('order_payment_status: ', order_payment_status.payment_status);
   if (order_payment_status.payment_status == 2) {
     return
   }
@@ -134,7 +134,7 @@ async function mpg_return (req, res) {
   console.log('Order Return', order);
 
   try {
-    console.log('success', order);
+    // console.log('success', order);
     res.status(200).send({
       success: true,
       message: '取得交易結果',
@@ -147,10 +147,13 @@ async function mpg_return (req, res) {
     })
   }
 
-  res.render('return', {
-    title: info.Message,
-    formData: order
-  });
+  // 將請求傳給前台
+  res.redirect('https://showanne.github.io/?status=' + info.Message)
+
+  // res.render('return', {
+  //   title: info.Message,
+  //   formData: order
+  // });
   // res.json(orders[info.Result.MerchantOrderNo]); // 將整筆訂單資料傳給前端
 }
 
@@ -186,7 +189,7 @@ async function mpg_notify (req, res) {
   if (!order) {
     return
   }
-  console.log('order', order);
+  // console.log('order', order);
 
   try {
     // 取出訂單資料並將藍新金流回傳的交易結果更新
