@@ -7,7 +7,7 @@ const RespondType = 'JSON'
 // createOrder 建立訂單 - POST /createOrder
 async function createOrder (req, res, next) {
   const orderData = req.body // 前端傳過來的訂單資料
-  const timeStamp = Math.round(new Date().getTime() / 1000) // 蘭新金流有限制時間戳長度 10 位數
+  const timeStamp = Math.round(new Date().getTime() / 1000) // 藍新金流有限制時間戳長度 10 位數
   console.log(orderData, timeStamp);
 
   try {
@@ -95,11 +95,11 @@ async function getOrder (req, res) {
 async function mpg_return (req, res) {
   console.count('/mpg_gateway_return_url');
   const data = req.body;
-  console.log('/mpg_gateway_return_url', data);
+  // console.log('/mpg_gateway_return_url', data);
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  // console.table('/mpg_gateway_return_url', info.Result);
+  console.table('/mpg_gateway_return_url', info.Result);
 
   let payment_status = 0
   if (info.Status == 'SUCCESS') {
