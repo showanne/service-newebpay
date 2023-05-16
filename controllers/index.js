@@ -93,6 +93,7 @@ async function getOrder (req, res) {
 
 // mpg_gateway_return_url 藍新金流通知交易資訊 - 藍新以POST mpg_return
 async function mpg_return (req, res) {
+  console.count('/mpg_gateway_return_url');
   const data = req.body;
   console.log('/mpg_gateway_return_url', data);
 
@@ -146,7 +147,8 @@ async function mpg_return (req, res) {
 
 // mpg_gateway_notify_url 藍新金流通知付款完成 - POST mpg_notify
 async function mpg_notify (req, res) {
-  console.log('/mpg_gateway_notify_url - req', req);
+  console.count('/mpg_gateway_notify_url');
+  // console.log('/mpg_gateway_notify_url - req', req);
 
   const data = req.body;
   // console.log('/mpg_gateway_notify_url', data);
