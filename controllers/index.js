@@ -99,7 +99,7 @@ async function mpg_return (req, res) {
 
   // 將回傳的資料解密
   const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.table('/mpg_gateway_return_url', info.Result);
+  console.log('/mpg_gateway_return_url', info.Result);
 
   let payment_status = 0
   if (info.Status == 'SUCCESS') {
