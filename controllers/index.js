@@ -94,61 +94,66 @@ async function getOrder (req, res) {
 // mpg_gateway_return_url 藍新金流通知交易資訊 - 藍新以POST mpg_return
 async function mpg_return (req, res) {
   console.count('/mpg_gateway_return_url');
-  const data = req.body;
-  // console.log('/mpg_gateway_return_url', data);
-
-  // 將回傳的資料解密
-  const info = create_mpg_aes_decrypt(data.TradeInfo)
-  // console.log('/mpg_gateway_return_url', info.Result);
-
-  const orderId = info.Result.MerchantOrderNo
-  // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
-  const order_payment_status = await Order.find({ order_id: orderId })
-  console.log('order_payment_status: ', order_payment_status.payment_status);
-  if (order_payment_status.payment_status == 2) {
-    return
-  }
-
-  // 更新付款狀態碼
-  let payment_status = 0
-  if (info.Status == 'SUCCESS') {
-    payment_status = 1 // 待付款
-  } else {
-    payment_status = 3 // 付款失敗
-  }
-
-  // 取出訂單資料，將交易結果傳進資料庫
-  // console.log(orders[info.Result.MerchantOrderNo]);
-  const order = await Order.findOneAndUpdate(
-    { order_id: orderId },
-    {
-      $set: {
-        payment_status: payment_status, // 更新付款狀態
-        order_status: 1 // 更新訂單狀態為 1-處理中
-      },
-    },
-    { new: true }
-  );
-  // orders[info.Result.MerchantOrderNo].payment_status = info.Status
-
-  console.log('Order Return', order);
-
   try {
+
+    const data = req.body;
+    // console.log('/mpg_gateway_return_url', data);
+
+    // 將回傳的資料解密
+    const info = create_mpg_aes_decrypt(data.TradeInfo)
+    // console.log('/mpg_gateway_return_url', info.Result);
+
+    const orderId = info.Result.MerchantOrderNo
+    // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
+    const order_payment_status = await Order.findOne({ order_id: orderId })
+    console.log('order_payment_status: ', order_payment_status.payment_status);
+    if (order_payment_status.payment_status == 2) {
+      return
+    }
+
+    // 更新付款狀態碼
+    let payment_status = 0
+    if (info.Status == 'SUCCESS') {
+      payment_status = 1 // 待付款
+    } else {
+      payment_status = 3 // 付款失敗
+    }
+
+    // 取出訂單資料，將交易結果傳進資料庫
+    // console.log(orders[info.Result.MerchantOrderNo]);
+    const order = await Order.findOneAndUpdate(
+      { order_id: orderId },
+      {
+        $set: {
+          payment_status: payment_status, // 更新付款狀態
+          order_status: 1 // 更新訂單狀態為 1-處理中
+        },
+      },
+      { new: true }
+    );
+    // orders[info.Result.MerchantOrderNo].payment_status = info.Status
+
+    console.log('Order Return', order);
+
     // console.log('success', order);
     res.status(200).send({
       success: true,
       message: '取得交易結果',
       order
     })
+
+    // 將請求傳給前台
+    res.redirect(`https://showanne.github.io/?status=${info.Message}`)
+
   } catch (error) {
+    console.log('error', error.message);
+
     res.status(400).send({
-      success: true,
+      success: false,
       message: error.message
     })
   }
 
-  // 將請求傳給前台
-  res.redirect('https://showanne.github.io/?status=' + info.Message)
 
   // res.render('return', {
   //   title: info.Message,
@@ -160,42 +165,44 @@ async function mpg_return (req, res) {
 // mpg_gateway_notify_url 藍新金流通知付款完成 - POST mpg_notify
 async function mpg_notify (req, res) {
   console.count('/mpg_gateway_notify_url');
-  // console.log('/mpg_gateway_notify_url - req', req);
-
-  const data = req.body;
-  // console.log('/mpg_gateway_notify_url', data);
-
-  // 將回傳的資料解密
-  const info = create_mpg_aes_decrypt(data.TradeInfo)
-  console.log('/mpg_gateway_notify_url', info.Result);
-
-  // 回傳的資料 /mpg_gateway_notify_url {
-  //   MerchantID: 'MS148719690',
-  //   Amt: 100,
-  //   TradeNo: '23051323503404758', / TradeNo 藍新金流交易序號
-  //   MerchantOrderNo: '1683993023',
-  //   RespondType: 'JSON',
-  //   IP: '123.193.181.242', / THINK: 可以再看看需不需要存資料庫
-  //   EscrowBank: 'HNCB', / EscrowBank 款項保管銀行 <- HNCB = 華南銀行 / THINK: 可以再看看需不需要存資料庫
-  //   PaymentType: 'WEBATM', / PaymentType 支付方式
-  //   PayTime: '2023-05-1323:50:34', / PayTime 支付完成時間 
-  //   PayerAccount5Code: '12345', / PayerAccount5Code 付款人金融機構帳號末五碼
-  //   PayBankCode: '809' / PayBankCode 付款人金融機構代碼
-  // }
-
-  // 檢查該筆訂單存不存在
-  // console.log(info, info.Result.MerchantOrderNo);
-  const order = await Order.find({ order_id: info.Result.MerchantOrderNo })
-  if (!order) {
-    return
-  }
-  // console.log('order', order);
-
   try {
+    // console.log('/mpg_gateway_notify_url - req', req);
+
+    const data = req.body;
+    // console.log('/mpg_gateway_notify_url', data);
+
+    // 將回傳的資料解密
+    const info = create_mpg_aes_decrypt(data.TradeInfo)
+    console.log('/mpg_gateway_notify_url', info.Result);
+
+    const order_id = info.Result.MerchantOrderNo
+
+    // 回傳的資料 /mpg_gateway_notify_url {
+    //   MerchantID: 'MS148719690',
+    //   Amt: 100,
+    //   TradeNo: '23051323503404758', / TradeNo 藍新金流交易序號
+    //   MerchantOrderNo: '1683993023',
+    //   RespondType: 'JSON',
+    //   IP: '123.193.181.242', / THINK: 可以再看看需不需要存資料庫
+    //   EscrowBank: 'HNCB', / EscrowBank 款項保管銀行 <- HNCB = 華南銀行 / THINK: 可以再看看需不需要存資料庫
+    //   PaymentType: 'WEBATM', / PaymentType 支付方式
+    //   PayTime: '2023-05-1323:50:34', / PayTime 支付完成時間 
+    //   PayerAccount5Code: '12345', / PayerAccount5Code 付款人金融機構帳號末五碼
+    //   PayBankCode: '809' / PayBankCode 付款人金融機構代碼
+    // }
+
+    // 檢查該筆訂單存不存在
+    // console.log(info, info.Result.MerchantOrderNo);
+    const order = await Order.findOne({ order_id: order_id })
+    if (!order) {
+      return res.status(404).end();
+    }
+    // console.log('order', order);
+
     // 取出訂單資料並將藍新金流回傳的交易結果更新
     // console.log(orders[info.Result.MerchantOrderNo]);
     const updateOrder = await Order.findOneAndUpdate(
-      { order_id: info.Result.MerchantOrderNo },
+      { order_id: order_id },
       {
         $set: {
           order_status: 2, // 更新訂單狀態為 2-已完成
@@ -214,6 +221,8 @@ async function mpg_notify (req, res) {
   
     console.log('Order Notify', updateOrder);
     
+    res.end();
+
     // ChatGPT: 因為 notify_url 是藍新金流向你的伺服器發送的 HTTP POST 請求，而你的伺服器只需要處理此請求，不需要回應任何 HTTP 狀態碼。藍新金流不會因為接收到的回應碼是什麼而影響交易流程，所以不需要回應 200。
     // res.sendStatus(200);
 
@@ -224,13 +233,11 @@ async function mpg_notify (req, res) {
     // })
   } catch (error) {
     console.log('error', error.message);
-
-    // res.sendStatus(500);
     
-    // res.status(400).send({
-    //   success: true,
-    //   message: error.message
-    // })
+    res.status(400).send({
+      success: false,
+      message: error.message
+    })
   }
 
   res.end();
