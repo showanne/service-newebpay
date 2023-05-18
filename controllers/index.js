@@ -103,6 +103,9 @@ async function mpg_return (req, res) {
     const info = create_mpg_aes_decrypt(data.TradeInfo)
     // console.log('/mpg_gateway_return_url', info.Result);
 
+    // 將解密後的資料轉換為字串形式
+    const queryString = new URLSearchParams(info).toString();
+
     // const orderId = info.Result.MerchantOrderNo
     // // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
     // const order_payment_status = await Order.findOne({ order_id: orderId })
@@ -144,7 +147,7 @@ async function mpg_return (req, res) {
     // })
 
     // 將請求傳給前台
-    res.redirect(200, 'https://showanne.github.io/?order=' + info)
+    res.redirect(200, '/mpg_gateway_return_url/?' + queryString)
 
   } catch (error) {
     console.log('error', error.message);
