@@ -147,7 +147,7 @@ async function mpg_return (req, res) {
     // })
 
     // 將請求傳給前台
-    res.redirect(200, 'mpg_gateway_return_url/?' + queryString)
+    res.redirect(200, 'https://service-newebpay.onrender.com/mpg_gateway_return_url/?' + queryString)
 
   } catch (error) {
     console.log('error', error.message);
