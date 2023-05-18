@@ -103,7 +103,7 @@ async function mpg_return (req, res) {
     const info = create_mpg_aes_decrypt(data.TradeInfo)
     // console.log('/mpg_gateway_return_url', info.Result);
 
-    const orderId = info.Result.MerchantOrderNo
+    // const orderId = info.Result.MerchantOrderNo
     // // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
     // const order_payment_status = await Order.findOne({ order_id: orderId })
     // console.log('order_payment_status: ', order_payment_status.payment_status);
@@ -112,38 +112,39 @@ async function mpg_return (req, res) {
     // }
 
     // 更新付款狀態碼
-    let payment_status = 0
-    if (info.Status == 'SUCCESS') {
-      payment_status = 1 // 待付款
-    } else {
-      payment_status = 3 // 付款失敗
-    }
+    // let payment_status = 0
+    // if (info.Status == 'SUCCESS') {
+    //   payment_status = 1 // 待付款
+    // } else {
+    //   payment_status = 3 // 付款失敗
+    // }
 
     // 取出訂單資料，將交易結果傳進資料庫
     // console.log(orders[info.Result.MerchantOrderNo]);
-    const order = await Order.findOneAndUpdate(
-      { order_id: orderId },
-      {
-        $set: {
-          payment_status: payment_status, // 更新付款狀態
-          order_status: 1 // 更新訂單狀態為 1-處理中
-        },
-      },
-      { new: true }
-    );
+    // const order = await Order.findOneAndUpdate(
+    //   { order_id: orderId },
+    //   {
+    //     $set: {
+    //       payment_status: payment_status, // 更新付款狀態
+    //       order_status: 1 // 更新訂單狀態為 1-處理中
+    //     },
+    //   },
+    //   { new: true }
+    // );
     // orders[info.Result.MerchantOrderNo].payment_status = info.Status
 
-    console.log('Order Return', order);
+    // console.log('Order Return', order);
 
     // console.log('success', order);
-    res.status(200).send({
-      success: true,
-      message: '取得交易結果',
-      order
-    })
+    // res.status(200).end();
+    // res.status(200).send({
+    //   success: true,
+    //   message: '取得交易結果',
+    //   order
+    // })
 
     // 將請求傳給前台
-    res.redirect('https://showanne.github.io/?order=' + orderId)
+    res.redirect(200, 'https://showanne.github.io/?order=' + info)
 
   } catch (error) {
     console.log('error', error.message);
