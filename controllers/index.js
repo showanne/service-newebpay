@@ -104,7 +104,7 @@ async function mpg_return (req, res) {
     // console.log('/mpg_gateway_return_url', info.Result);
 
     // 將解密後的資料轉換為字串形式
-    const queryString = new URLSearchParams(info).toString();
+    const queryString = new URLSearchParams(info.Result).toString();
 
     // const orderId = info.Result.MerchantOrderNo
     // // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
@@ -147,7 +147,7 @@ async function mpg_return (req, res) {
     // })
 
     // 將請求傳給前台
-    res.redirect(200, '/mpg_gateway_return_url/?' + queryString)
+    res.redirect(200, 'mpg_gateway_return_url/?' + queryString)
 
   } catch (error) {
     console.log('error', error.message);
