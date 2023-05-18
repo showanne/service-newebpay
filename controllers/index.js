@@ -115,40 +115,40 @@ async function mpg_return (req, res) {
     }
 
     // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
-    console.log('order: ', order.payment_status);
-    if (order.payment_status != '') {
-      return
-    }
+    // console.log('order: ', order.payment_status);
+    // if (order.payment_status != '') {
+    //   return
+    // }
 
     // 更新付款狀態碼
-    let payment_status = 0
-    if (info.Status == 'SUCCESS') {
-      payment_status = 1 // 待付款
-    } else {
-      payment_status = 3 // 付款失敗
-    }
+    // let payment_status = 0
+    // if (info.Status == 'SUCCESS') {
+    //   payment_status = 1 // 待付款
+    // } else {
+    //   payment_status = 3 // 付款失敗
+    // }
 
     // 取出訂單資料，將交易結果傳進資料庫
     // console.log(orders[info.Result.MerchantOrderNo]);
-    const updateOrder = await Order.findOneAndUpdate(
-      { order_id: orderId },
-      {
-        $set: {
-          payment_status: payment_status, // 更新付款狀態
-          order_status: 1 // 更新訂單狀態為 1-處理中
-        },
-      },
-      { new: true }
-    );
+    // const updateOrder = await Order.findOneAndUpdate(
+    //   { order_id: orderId },
+    //   {
+    //     $set: {
+    //       payment_status: payment_status, // 更新付款狀態
+    //       order_status: 1 // 更新訂單狀態為 1-處理中
+    //     },
+    //   },
+    //   { new: true }
+    // );
     // orders[info.Result.MerchantOrderNo].payment_status = info.Status
 
-    console.log('Order Return', updateOrder);
+    // console.log('Order Return', updateOrder);
 
     // console.log('success', order);
     res.status(200).send({
       success: true,
       message: '取得交易結果',
-      updateOrder
+      order: info.Result
     })
     
     // 將請求傳給前台
