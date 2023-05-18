@@ -103,7 +103,7 @@ async function mpg_return (req, res) {
     const info = create_mpg_aes_decrypt(data.TradeInfo)
     // console.log('/mpg_gateway_return_url', info.Result);
 
-    // const orderId = info.Result.MerchantOrderNo
+    const orderId = info.Result.MerchantOrderNo
     // // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
     // const order_payment_status = await Order.findOne({ order_id: orderId })
     // console.log('order_payment_status: ', order_payment_status.payment_status);
