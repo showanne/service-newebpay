@@ -103,13 +103,13 @@ async function mpg_return (req, res) {
     const info = create_mpg_aes_decrypt(data.TradeInfo)
     // console.log('/mpg_gateway_return_url', info.Result);
 
-    const orderId = info.Result.MerchantOrderNo
-    // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
-    const order_payment_status = await Order.findOne({ order_id: orderId })
-    console.log('order_payment_status: ', order_payment_status.payment_status);
-    if (order_payment_status && order_payment_status.payment_status == 2) {
-      return
-    }
+    // const orderId = info.Result.MerchantOrderNo
+    // // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
+    // const order_payment_status = await Order.findOne({ order_id: orderId })
+    // console.log('order_payment_status: ', order_payment_status.payment_status);
+    // if (order_payment_status && order_payment_status.payment_status == 2) {
+    //   return
+    // }
 
     // 更新付款狀態碼
     let payment_status = 0
@@ -143,7 +143,7 @@ async function mpg_return (req, res) {
     })
 
     // 將請求傳給前台
-    res.redirect(`https://showanne.github.io/?status=${info.Message}`)
+    res.redirect('https://showanne.github.io/?order=' + orderId)
 
   } catch (error) {
     console.log('error', error.message);
