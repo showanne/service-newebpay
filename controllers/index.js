@@ -108,7 +108,7 @@ async function mpg_return (req, res) {
 
     const orderId = info.Result.MerchantOrderNo
     const order = await Order.findOne({ order_id: orderId })
-    
+
     // 檢查該筆訂單存不存在
     if (!order) {
       return res.status(400).end();
@@ -145,19 +145,19 @@ async function mpg_return (req, res) {
     console.log('Order Return', updateOrder);
 
     // console.log('success', order);
-    // res.status(200).send({
-    //   success: true,
-    //   message: '取得交易結果',
-    //   order
-    // })
+    res.status(200).send({
+      success: true,
+      message: '取得交易結果',
+      updateOrder
+    })
     
     // 將請求傳給前台
     // res.redirect(200, 'https://service-newebpay.onrender.com/mpg_gateway_return_url/?' + queryString)
 
-    res.render('return', {
-      title: info.Message,
-      formData: updateOrder
-    });
+    // res.render('return', {
+    //   title: info.Message,
+    //   formData: updateOrder
+    // });
 
   } catch (error) {
     console.log('error', error.message);
