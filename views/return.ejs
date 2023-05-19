@@ -76,8 +76,21 @@
       // console.log(this.order);
 
       const params = new URLSearchParams(window.location.search);
-      this.order = params
+      // this.order = params
+
+      // 將 query string 轉換成 JavaScript 物件
+      for (const [key, value] of params) {
+        this.order[key] = value;
+      }
+
       console.log('order_return: ', this.order);
+
+      // 移除 query string，將網址調整為沒有參數的版本
+      const newUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, newUrl);
+      console.log('window.location.origin:', window.location.origin)
+      console.log('window.location.pathname:', window.location.pathname)
+      console.log('window.newUrl:', newUrl);
 
       // const merchantID = params.get('merchantOrderNo');
       // const amt = params.get('amt');
