@@ -20,20 +20,21 @@
     <div class="ts-header is-start-icon">
       <span class="ts-icon is-thumbs-up"></span>
       <%= title %>
-        交易結果
     </div>
-    <!-- <p class="ts-text">formData： <%= formData %> </p> -->
+    <p class="ts-text">order： {{ order }} </p>
     <!-- <p class="ts-text">商家代號： <%= formData.MerchantID %> </p> -->
-    <p class="ts-text">訂單編號： <%= order.order_id %>
+    <p class="ts-text">訂單編號：  {{ order.MerchantOrderNo }}
     </p>
-    <p class="ts-text">金額： <%= order.payment_price %>
+    <p class="ts-text">金額：  {{ order.Amt }}
     </p>
-    <p class="ts-text">商品： <%= order.project %>
+    <p class="ts-text">商品：  {{ order.ItemDesc }}
     </p>
-    <!-- <p class="ts-text">付款方式： <%= order.PaymentType %> </p> -->
-    <p class="ts-text">訂單狀態： <%= order.payment_status %>
+    <p class="ts-text">付款方式：  {{ order.PaymentType }}
     </p>
-    {{ order }}
+    <p class="ts-text">付款時間：  {{ order.PayTime }}
+    </p>
+    <!-- <p class="ts-text">訂單狀態：  {{ order.payment_status }}
+    </p> -->
   </div>
 </body>
 
@@ -75,8 +76,8 @@
       // console.log(this.order);
 
       const params = new URLSearchParams(window.location.search);
-      console.log('order: ', params);
       this.order = params
+      console.log('order_return: ', this.order);
 
       // const merchantID = params.get('merchantOrderNo');
       // const amt = params.get('amt');
