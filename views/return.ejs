@@ -20,21 +20,25 @@
     <div class="ts-header is-start-icon">
       <span class="ts-icon is-thumbs-up"></span>
       <%= title %>
-      交易結果
+        交易結果
     </div>
     <!-- <p class="ts-text">formData： <%= formData %> </p> -->
     <!-- <p class="ts-text">商家代號： <%= formData.MerchantID %> </p> -->
-    <p class="ts-text">訂單編號： <%= formData.order_id %> </p>
-    <p class="ts-text">金額： <%= formData.payment_price %> </p>
-    <p class="ts-text">商品： <%= formData.project %> </p>
-    <!-- <p class="ts-text">付款方式： <%= formData.PaymentType %> </p> -->
-    <p class="ts-text">訂單狀態： <%= formData.payment_status %> </p>
+    <p class="ts-text">訂單編號： <%= order.order_id %>
+    </p>
+    <p class="ts-text">金額： <%= order.payment_price %>
+    </p>
+    <p class="ts-text">商品： <%= order.project %>
+    </p>
+    <!-- <p class="ts-text">付款方式： <%= order.PaymentType %> </p> -->
+    <p class="ts-text">訂單狀態： <%= order.payment_status %>
+    </p>
     {{ order }}
   </div>
 </body>
 
 <script type="module">
-  
+
   // 收到的訂單資料格式
   // "success": true,
   // "message": "取得交易結果",
@@ -52,23 +56,23 @@
   //   "newebpay_aes_encrypt": "13b7fa9fd92305551393f96554ad5e0e9f16d80baf2b83d045d93ce6e738619b2a90457e105fc8ea8116effe6b415221b7047ae5617be0126f99f2249524645845f982ef0f7774b09369e792ab6b71a9aedb0215fcae524546aecaceb2a74fbcc4ae0cc80342240a68bf4b289dcff6275a62bd2c5aebd88d7c37b68e953408cbe06e99cf902f8a68d77aab4835d0abd622f331d7a863c91e9db2d2b2f7044bb7",
   //   "newebpay_sha_encrypt": "05760195F2A8AB487757C44853543FDC27F95E2E3CCA732E2D761B300F29B034"
   // }
-  
+
   import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js"
 
   const app = {
-      data() {
-        return {
-          order: {}
-        }
-      },
-      async mounted() { // 進入頁面時觸發取得資料
+    data() {
+      return {
+        order: {}
+      }
+    },
+    async mounted() { // 進入頁面時觸發取得資料
       //   // this.orderId = urlParams.get('order')
       //   // console.log(urlParams.get('order'));
-        // const apiUrl = `/mpg_gateway_return_url`
-        // const res = await axios.get(apiUrl)
-        // console.log('return page', res);
-        // this.order = res.data
-        // console.log(this.order);
+      // const apiUrl = `/mpg_gateway_return_url`
+      // const res = await axios.get(apiUrl)
+      // console.log('return page', res);
+      // this.order = res.data
+      // console.log(this.order);
 
       const params = new URLSearchParams(window.location.search);
       console.log('order: ', params);
@@ -89,9 +93,10 @@
       //     console.log(this.order);
       //     // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
       //   }
-      }
     }
+  }
 
-    // createApp(app).mount('#app')
-  </script>
+  createApp(app).mount('#app')
+</script>
+
 </html>
