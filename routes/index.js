@@ -6,6 +6,7 @@ const {
   createOrder,
   getOrder,
   mpg_return,
+  getReturn,
   mpg_notify
 } = require('../controllers/index.js');
 
@@ -31,7 +32,7 @@ router.get('/getOrder/:id', getOrder)
 
 // 藍新金流通知交易資訊，前端顯示交易有成功
 router.post('/mpg_gateway_return_url', mpg_return)
-router.get('/return/', geReturn)
+router.get('/return/', getReturn)
 
 // 藍新金流通知付款完成 /?回傳進資料庫
 router.post('/mpg_gateway_notify_url', mpg_notify)
