@@ -22,7 +22,7 @@
       <%= title %>
       交易結果
     </div>
-    <p class="ts-text">formData： <%= formData %> </p>
+    <!-- <p class="ts-text">formData： <%= formData %> </p> -->
     <!-- <p class="ts-text">商家代號： <%= formData.MerchantID %> </p> -->
     <p class="ts-text">訂單編號： <%= formData.order_id %> </p>
     <p class="ts-text">金額： <%= formData.payment_price %> </p>
@@ -53,15 +53,15 @@
   //   "newebpay_sha_encrypt": "05760195F2A8AB487757C44853543FDC27F95E2E3CCA732E2D761B300F29B034"
   // }
   
-  // import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js"
+  import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js"
 
-  // const app = {
-  //     data() {
-  //       return {
-  //         order: {}
-  //       }
-  //     },
-      // async mounted() { // 進入頁面時觸發取得資料
+  const app = {
+      data() {
+        return {
+          order: {}
+        }
+      },
+      async mounted() { // 進入頁面時觸發取得資料
       //   // this.orderId = urlParams.get('order')
       //   // console.log(urlParams.get('order'));
         // const apiUrl = `/mpg_gateway_return_url`
@@ -70,7 +70,10 @@
         // this.order = res.data
         // console.log(this.order);
 
-      // const params = new URLSearchParams(window.location.search);
+      const params = new URLSearchParams(window.location.search);
+      console.log('order: ', params);
+      this.order = params
+
       // const merchantID = params.get('merchantOrderNo');
       // const amt = params.get('amt');
       // const tradeNo = params.get('itemDesc');
@@ -86,8 +89,8 @@
       //     console.log(this.order);
       //     // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
       //   }
-      // }
-    // }
+      }
+    }
 
     // createApp(app).mount('#app')
   </script>
