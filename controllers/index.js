@@ -111,7 +111,7 @@ async function mpg_return (req, res) {
 
     // 檢查該筆訂單存不存在
     if (!order) {
-      return res.status(400).end();
+      return res.status(404).end();
     }
 
     // 先判斷是否付款狀態已經是 2-付款完成，避免 notify 先於 return 回傳導至資料被覆蓋
@@ -145,14 +145,14 @@ async function mpg_return (req, res) {
     // console.log('Order Return', updateOrder);
 
     // console.log('success', order);
-    res.status(200).send({
-      success: true,
-      message: '取得交易結果',
-      order: info.Result
-    })
+    // res.status(200).send({
+    //   success: true,
+    //   message: '取得交易結果',
+    //   order: info.Result
+    // })
     
-    // 將請求傳給前台
-    // res.redirect(200, 'https://service-newebpay.onrender.com/mpg_gateway_return_url/?' + queryString)
+    將請求傳給前台
+    res.redirect(200, '/return_url/?' + queryString)
 
     // res.render('return', {
     //   title: info.Message,
@@ -257,6 +257,24 @@ async function mpg_notify (req, res) {
   res.end();
 }
 
+// getReturn 呈現交易資料 - GET /return/
+async function getReturn (req, res) {
+  const data = req.query // 取得附在網址上的參數
+  console.log('order: ', data);
+
+  try {
+    res.render('return', {
+      title: '交易結果',
+      formData: data
+    });
+  } catch (error) {
+    res.status(400).send({
+      success: true,
+      message: error.message
+    })
+  }
+}
+
 // TODO: 查詢指定訂單資料 - 用訂單編號來發動單筆查詢 藍新金流API
 async function getOrderById (req, res) {
 
@@ -302,5 +320,6 @@ module.exports = {
   createOrder,
   getOrder,
   mpg_return,
+  getReturn,
   mpg_notify
 };
