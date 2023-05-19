@@ -151,7 +151,7 @@ async function mpg_return (req, res) {
     //   order: info.Result
     // })
     
-    將請求傳給前台
+    // 將請求傳給前台
     res.redirect(200, '/return_url/?' + queryString)
 
     // res.render('return', {
