@@ -21,112 +21,27 @@
       <span class="ts-icon is-thumbs-up"></span>
       <%= title %>
     </div>
-    <p class="ts-text">order： <%= formData %> </p>
-    <!-- <p class="ts-text">商家代號： <%= formData.MerchantID %> </p> -->
-    <p class="ts-text">訂單編號：  <%= formData.order_id %>
+    <p class="ts-text">訂單編號： <%= formData.order_id %>
     </p>
-    <p class="ts-text">金額：  <%= formData.payment_price %>
+    <p class="ts-text">金額： <%= formData.payment_price %>
     </p>
-    <p class="ts-text">商品：  <%= formData.project %>
+    <p class="ts-text">商品： <%= formData.project %>
     </p>
-    <p class="ts-text">付款方式：  <%= formData.payment_method %>
-    <p class="ts-text">付款資料：  <%= formData.user_name %> （<%= formData.user_email %>）
+    <p class="ts-text">付款方式： <%= formData.payment_method %>
     </p>
-    <p class="ts-text">付款時間：  <%= formData.newebpay_payTime %>
+    <p class="ts-text">付款資料： <%= formData.user_name %> （<%= formData.user_email %>）
     </p>
-    <p class="ts-text">訂單狀態：  <%= formData.payment_status > 0 ? '付款成功' : '待付款'   %>
+    <p class="ts-text">付款時間： <%= formData.newebpay_payTime %>
     </p>
-    <p class="ts-text">藍新金流交易編號：  <%= formData.newebpay_tradeNo %>
-
-    <br><br><br>
-    <p class="ts-text">訂單編號：  {{ order.MerchantOrderNo }}
+    <p class="ts-text">付款狀態： <%= formData.payment_status==2 ? '付款成功' : '待付款' %>
     </p>
-    <p class="ts-text">金額：  {{ order.Amt }}
+    <p class="ts-text">訂單完成時間： <%= formData.order_final_date %>
     </p>
-    <p class="ts-text">商品：  {{ order.ItemDesc }}
+    <p class="ts-text">訂單狀態： <%= formData.order_status==2 ? '已完成' : '處理中' %>
     </p>
-    <p class="ts-text">付款方式：  {{ order.PaymentType }}
-    </p>
-    <p class="ts-text">付款時間：  {{ order.PayTime }}
-    </p>
-    <p class="ts-text">訂單狀態：  {{ order.payment_status > 0 ? '付款成功' : '待付款' }}
+    <p class="ts-text">藍新金流交易序號： <%= formData.newebpay_tradeNo %>
     </p>
   </div>
 </body>
-
-<script type="module">
-
-  // 收到的訂單資料格式
-  // "success": true,
-  // "message": "取得交易結果",
-  // "order": {
-  //   "_id": "645fa8ccc6ef3135e5780506",
-  //   "user_name": "Anne",
-  //   "user_email": "anne@anne.com",
-  //   "project": "商品",
-  //   "order_create_date": "2023-05-13T15:12:00.589Z",
-  //   "order_id": "1683990733",
-  //   "order_status": 1,
-  //   "payment_price": 100,
-  //   "payment_status": 1,
-  //   "__v": 0,
-  //   "newebpay_aes_encrypt": "13b7fa9fd92305551393f96554ad5e0e9f16d80baf2b83d045d93ce6e738619b2a90457e105fc8ea8116effe6b415221b7047ae5617be0126f99f2249524645845f982ef0f7774b09369e792ab6b71a9aedb0215fcae524546aecaceb2a74fbcc4ae0cc80342240a68bf4b289dcff6275a62bd2c5aebd88d7c37b68e953408cbe06e99cf902f8a68d77aab4835d0abd622f331d7a863c91e9db2d2b2f7044bb7",
-  //   "newebpay_sha_encrypt": "05760195F2A8AB487757C44853543FDC27F95E2E3CCA732E2D761B300F29B034"
-  // }
-
-  import { createApp } from "https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.47/vue.esm-browser.min.js"
-
-  const app = {
-    data() {
-      return {
-        order: {}
-      }
-    },
-    async mounted() { // 進入頁面時觸發取得資料
-      //   // this.orderId = urlParams.get('order')
-      //   // console.log(urlParams.get('order'));
-      // const apiUrl = `/mpg_gateway_return_url`
-      // const res = await axios.get(apiUrl)
-      // console.log('return page', res);
-      // this.order = res.data
-      // console.log(this.order);
-
-      const params = new URLSearchParams(window.location.search);
-      // this.order = params
-
-      // 將 query string 轉換成 JavaScript 物件
-      for (const [key, value] of params) {
-        this.order[key] = value;
-      }
-
-      console.log('order_return: ', this.order);
-
-      // 移除 query string，將網址調整為沒有參數的版本
-      // const newUrl = window.location.origin + window.location.pathname;
-      // window.history.replaceState({}, document.title, newUrl);
-      // console.log('window.location.origin:', window.location.origin)
-      // console.log('window.location.pathname:', window.location.pathname)
-      // console.log('window.newUrl:', newUrl);
-
-      const merchantID = params.get('merchantOrderNo');
-      const amt = params.get('amt');
-      const tradeNo = params.get('itemDesc');
-      // 取得其他回傳資料
-        console.log(params, merchantID, amt, tradeNo);
-      },
-      methods: {
-        async getReturnOrder() {
-          const apiUrl = '/mpg_gateway_return_url'
-          const res = await axios.post(apiUrl);
-          console.log('return page', res);
-          this.order = res.data
-          console.log(this.order);
-          // window.location.href = `/checkOrder/?order=${res.data.timeStamp}` // 轉址到該筆訂單的確認頁面
-        }
-    }
-  }
-
-  createApp(app).mount('#app')
-</script>
 
 </html>
