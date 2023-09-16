@@ -22,7 +22,23 @@
       <%= title %>
     </div>
     <p class="ts-text">order： <%= formData %> </p>
-    <p class="ts-text">商家代號： <%= formData.MerchantID %> </p>
+    <!-- <p class="ts-text">商家代號： <%= formData.MerchantID %> </p> -->
+    <p class="ts-text">訂單編號：  <%= formData.order_id %>
+    </p>
+    <p class="ts-text">金額：  <%= formData.payment_price %>
+    </p>
+    <p class="ts-text">商品：  <%= formData.project %>
+    </p>
+    <p class="ts-text">付款方式：  <%= formData.payment_method %>
+    <p class="ts-text">付款資料：  <%= formData.user_name %> （<%= formData.user_email %>）
+    </p>
+    <p class="ts-text">付款時間：  <%= formData.newebpay_payTime %>
+    </p>
+    <p class="ts-text">訂單狀態：  <%= formData.payment_status > 0 ? '付款成功' : '待付款'   %>
+    </p>
+    <p class="ts-text">藍新金流交易編號：  <%= formData.newebpay_tradeNo %>
+
+    <br><br><br>
     <p class="ts-text">訂單編號：  {{ order.MerchantOrderNo }}
     </p>
     <p class="ts-text">金額：  {{ order.Amt }}

@@ -264,10 +264,12 @@ async function getReturn (req, res) {
   const data = req.query // 取得附在網址上的參數
   console.log('order: ', data);
 
+  const order = await Order.findOne({ order_id: data.MerchantOrderNo })
+
   try {
     res.render('return', {
       title: '交易結果',
-      formData: data
+      formData: order
     });
   } catch (error) {
     res.status(400).send({
